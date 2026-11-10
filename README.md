@@ -27,3 +27,10 @@ Laravel + PostgreSQL data layer for a small Campus Events system.
 - upcoming(): events whose start time is now or later
 - atVenue($venueId): events held at one venue
 - withDressCode($code): events whose details column has this dress_code value
+## Query counts for /events
+
+| Version | Queries sent |
+| Naive (lazy loading) | 101 |
+| Fixed (with + withCount) | 2 |
+
+The naive page sends one query for the events and then one query per row for each relationship, so the number of queries grows with the number of rows. Eager loading fetches all the venues in one extra query and withCount puts the participant counts into the main query, so the number stays the same however many rows are shown.

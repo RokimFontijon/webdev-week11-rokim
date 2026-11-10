@@ -11,8 +11,12 @@ class EventController extends Controller
     {
         DB::enableQueryLog();
 
-        // Naive version: no eager loading
-        $events = Event::orderBy('id')->limit(50)->get();
+        // Fixed version: eager load the venue and count the participants in SQL
+        $events = Event::with('venue')
+            ->withCount('participants')
+            ->orderBy('id')
+            ->limit(50)
+            ->get();
 
         $html = view('events.index', ['events' => $events])->render();
         $queryCount = count(DB::getQueryLog());
