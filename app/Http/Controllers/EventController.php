@@ -60,4 +60,25 @@ class EventController extends Controller
             'containsCount'
         ));
     }
+
+    public function search(Request $request)
+    {
+        $q = trim((string) $request->query('q', ''));
+
+        $results = collect();
+        $sql = null;
+        $bindings = [];
+
+        if ($q !== '') {
+            $query = Event::with('venue')
+                ->whereFullText('description', $q)
+                ->limit(50);
+
+            $sql = $query->toSql();
+            $bindings = $query->getBindings();
+            $results = $query->get();
+        }
+
+        return view('events.search', compact('q', 'sql', 'bindings', 'results'));
+    }
 }
