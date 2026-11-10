@@ -22,3 +22,8 @@ Laravel + PostgreSQL data layer for a small Campus Events system.
 
 - The pivot table has a composite primary key (`event_id`, `participant_id`), so the same participant cannot register for the same event twice.
 - `status` on the pivot is `registered` or `waitlisted`.
+## Local scopes (Event model)
+
+- upcoming(): events whose start time is now or later
+- atVenue($venueId): events held at one venue
+- withDressCode($code): events whose details column has this dress_code value
